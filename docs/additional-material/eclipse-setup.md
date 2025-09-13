@@ -2,6 +2,7 @@
 id: anleitungen-11-eclipse-setup
 title: Eclipse-Setup für ABAP-Entwicklung
 sidebar_label: "Eclipse-Setup"
+sidebar_position: 10
 ---
 
 ## Einführung

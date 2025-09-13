@@ -1,7 +1,7 @@
 ---
 title: ABAP Development Tools
 description: ""
-sidebar_position: 10
+sidebar_position: 40
 tags: []
 ---
 

@@ -1,7 +1,7 @@
 ---
-title: abapGit auf der ABAP Environment verwenden
+title: abapGit installieren
 description: ""
-sidebar_position: 60
+sidebar_position: 30
 tags: []
 ---
 
@@ -14,7 +14,7 @@ tags: []
 
 ## abapGit installieren
 
-- [ABAP Development Tools](../adt.md) starten
+- [ABAP Development Tools](adt.md) starten
 - Option `Help - Install new Software...` auswählen
 - Folgende Informationen eingeben und Taste `ENTER` betätigen
   - Work with: `https://eclipse.abapgit.org/updatesite/`
@@ -23,7 +23,7 @@ tags: []
 
 ## Remote-Repository und lokales Repository verbinden
 
-- [ABAP Development Tools](../adt.md) starten
+- [ABAP Development Tools](adt.md) starten
 - View `Window - Show View - Other... - ABAP - abapGit Repositories` öffnen
 - Drucktaste `Link New abapGit Repository...` betätigen
 - Folgende Informationen eingeben und Drucktaste `Next >` betätigen
@@ -35,7 +35,7 @@ tags: []
 
 ## Änderungen vom lokalen Repository hochladen
 
-- [ABAP Development Tools](../adt.md) starten
+- [ABAP Development Tools](adt.md) starten
 - View `Window - Show View - Other... - ABAP - abapGit Repositories` öffnen
 - Drucktaste `My Repositories` betätigen
 - Rechtsklick auf das Repository und Option `Stage and Push` auswählen
@@ -47,7 +47,7 @@ tags: []
 
 ## Änderungen vom Remote-Repository herunterladen
 
-- [ABAP Development Tools](../adt.md) starten
+- [ABAP Development Tools](adt.md) starten
 - View `Window - Show View - Other... - ABAP - abapGit Repositories` öffnen
 - Drucktaste `My Repositories` betätigen
 - Rechtsklick auf das Repository und Option `Pull...` auswählen
@@ -55,7 +55,7 @@ tags: []
 - Objekte markieren und Drucktaste `Next >` betätigen
 - Drucktaste `Finish` betätigen
 - Folgende Informationen eingeben und Drucktaste `OK` betätigen
-  - Username: `Dein GitHub User` (z.B. appenmaier)
+  - Username: `Dein GitHub User` 
   - Password/Token: `Dein Token (Classic)` (z.B. ghp_5OEkQAXGp9xXPkqLbYvRbq19mYsfyi1yHbnT)
 
 :::tip Hinweis

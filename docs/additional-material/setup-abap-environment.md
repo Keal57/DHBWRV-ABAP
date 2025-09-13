@@ -1,7 +1,7 @@
 ---
-title: SAP BTP ABAP Environment einrichten (DHBW und SAP)
+title: ABAP-Entwicklungspaket anlegen
 description: ""
-sidebar_position: 10
+sidebar_position: 20
 tags: []
 ---
 

@@ -1,15 +1,9 @@
 ---
 title: Links
 description: ""
-sidebar_position: 40
+sidebar_position: 70
 tags: []
 ---
-
-## Musterlösungen (GitHub Repositories)
-
-- [Übungsaufgaben](https://github.com/appenmaier/abap_exercises)
-- [Filmbewertungs-App](https://github.com/appenmaier/abap_movie)
-- [Reise-App](https://github.com/appenmaier/abap_travel)
 
 ## Dokumentationen (Webseiten)
 
