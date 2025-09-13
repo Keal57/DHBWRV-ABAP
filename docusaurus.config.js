@@ -4,13 +4,14 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
   title: "Anwendungsentwicklung in SAP S/4HANA",
   tagline: "",
-  url: "https://appenmaier.github.io",
-  baseUrl: "/s4hana/",
+  url: "https://keal57.github.io",
+  baseUrl: "/DHBWRV-ABAP/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
   favicon: "img/favicon.ico",
-  organizationName: "appenmaier",
-  projectName: "s4hana",
+  organizationName: "Keal57",
+  projectName: "DHBWRV-ABAP",
+  trailingSlash: false, 
   markdown: {
     mermaid: true,
   },
