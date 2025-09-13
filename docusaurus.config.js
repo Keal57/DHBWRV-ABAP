@@ -60,12 +60,6 @@ const config = {
         },
         {
           type: "doc",
-          docId: "exercises/abap/abap-01",
-          position: "left",
-          label: "Übungsaufgaben",
-        },
-        {
-          type: "doc",
           docId: "rap-cookbook/introduction",
           position: "left",
           label: "RAP Cookbook",
@@ -84,8 +78,7 @@ const config = {
       ],
     },
     footer: {
-      style: "dark",
-      copyright: `Copyright © ${new Date().getFullYear()} Daniel Appenmaier Built with Docusaurus.`,
+      style: "dark"
     },
     prism: {
       theme: lightCodeTheme,
