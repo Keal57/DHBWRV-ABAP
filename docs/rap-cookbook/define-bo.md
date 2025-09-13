@@ -4,11 +4,11 @@ description: ""
 sidebar_position: 10
 ---
 
-- Die Anwendungstabelle `Z_TRAVEL_A` erstellen
-- Die ABAP-Klasse `ZCL_TRAVEL_GENERATOR` erstellen
-- Die BO Base View `ZR_Travel` erstellen
+- Die Anwendungstabelle `ZXX_TRAVEL_A` erstellen
+- Die ABAP-Klasse `ZXX_CL_TRAVEL_GENERATOR` erstellen
+- Die BO Base View `ZXX_R_Travel` erstellen
 
-## Anwendungstabelle `Z_TRAVEL_A`
+## Anwendungstabelle `ZXX_TRAVEL_A`
 
 ```sql showLineNumbers
 //highlight-start
@@ -17,7 +17,7 @@ sidebar_position: 10
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #RESTRICTED
-define table z_travel_a {
+define table ZXX_travel_a {
   key client      : abap.clnt not null;
   key travel_uuid : sysuuid_x16 not null;
   travel_id       : /dmo/travel_id;
@@ -25,9 +25,9 @@ define table z_travel_a {
   customer_id     : /dmo/customer_id;
   begin_date      : /dmo/begin_date;
   end_date        : /dmo/end_date;
-  @Semantics.amount.currencyCode : 'z_travel_a.currency_code'
+  @Semantics.amount.currencyCode : 'ZXX_travel_a.currency_code'
   booking_fee     : /dmo/booking_fee;
-  @Semantics.amount.currencyCode : 'z_travel_a.currency_code'
+  @Semantics.amount.currencyCode : 'ZXX_travel_a.currency_code'
   total_price     : /dmo/total_price;
   currency_code   : /dmo/currency_code;
   description     : /dmo/description;
@@ -40,22 +40,22 @@ define table z_travel_a {
 //highlight-end
 ```
 
-## ABAP-Klasse `ZCL_TRAVEL_GENERATOR`
+## ABAP-Klasse `ZXX_CL_TRAVEL_GENERATOR`
 
-```abap title="ZCL_TRAVEL_GENERATOR.abap" showLineNumbers
+```abap title="ZXX_CL_TRAVEL_GENERATOR.abap" showLineNumbers
 //highlight-start
-CLASS zcl_travel_generator DEFINITION PUBLIC FINAL CREATE PUBLIC.
+CLASS ZXX_cl_travel_generator DEFINITION PUBLIC FINAL CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES if_oo_adt_classrun.
 ENDCLASS.
 
-CLASS zcl_travel_generator IMPLEMENTATION.
+CLASS ZXX_cl_travel_generator IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
-    DATA travel  TYPE z_travel_a.
-    DATA travels TYPE TABLE OF z_travel_a.
+    DATA travel  TYPE ZXX_travel_a.
+    DATA travels TYPE TABLE OF ZXX_travel_a.
 
     " Delete Travels
-    DELETE FROM z_travel_a.
+    DELETE FROM ZXX_travel_a.
     out->write( |Deleted Travels: { sy-dbcnt }| ).
 
     " Create Travel
@@ -135,21 +135,21 @@ CLASS zcl_travel_generator IMPLEMENTATION.
     APPEND travel TO travels.
 
     " Insert Travels
-    INSERT z_travel_a FROM TABLE @travels.
+    INSERT ZXX_travel_a FROM TABLE @travels.
     out->write( |Inserted Travels: { sy-dbcnt }| ).
   ENDMETHOD.
 ENDCLASS.
 //highlight-end
 ```
 
-## BO Base View `ZR_Travel`
+## BO Basic View `ZXX_R_Travel`
 
 ```sql showLineNumbers
 //highlight-start
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel'
-define root view entity ZR_Travel
-  as select from z_travel_a
+define root view entity ZXX_R_Travel
+  as select from ZXX_travel_a
 {
   key travel_uuid     as TravelUuid,
       travel_id       as TravelId,

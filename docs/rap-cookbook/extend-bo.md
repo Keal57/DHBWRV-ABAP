@@ -4,12 +4,12 @@ description: ""
 sidebar_position: 40
 ---
 
-- Die Anwendungstabelle `Z_BOOKING_A` erstellen
-- Die ABAP-Klasse `ZCL_TRAVEL_GENERATOR` um Buchungen erweitern
-- Die BO Base View `ZR_Booking` inklusive einer Assoziation zur BO Base View `ZR_Travel` erstellen
-- Die BO Base View `ZR_Travel` um eine Assoziation zur BO Base View `ZR_Booking` erweitern
+- Die Anwendungstabelle `ZXX_BOOKING_A` erstellen
+- Die ABAP-Klasse `ZXX_CL_TRAVEL_GENERATOR` um Buchungen erweitern
+- Die BO Base View `ZXX_R_Booking` inklusive einer Assoziation zur BO Base View `ZXX_R_Travel` erstellen
+- Die BO Base View `ZXX_R_Travel` um eine Assoziation zur BO Base View `ZXX_R_Booking` erweitern
 
-## Anwendungstabelle `Z_BOOKING_A`
+## Anwendungstabelle `ZXX_BOOKING_A`
 
 ```sql showLineNumbers
 //highlight-start
@@ -18,7 +18,7 @@ sidebar_position: 40
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #RESTRICTED
-define table z_booking_a {
+define table ZXX_booking_a {
   key client       : abap.clnt not null;
   key booking_uuid : sysuuid_x16 not null;
   travel_uuid      : sysuuid_x16 not null;
@@ -27,37 +27,37 @@ define table z_booking_a {
   carrier_id       : /dmo/carrier_id;
   connection_id    : /dmo/connection_id;
   flight_date      : /dmo/flight_date;
-  @Semantics.amount.currencyCode : 'z_booking_a.currency_code'
+  @Semantics.amount.currencyCode : 'ZXX_booking_a.currency_code'
   flight_price     : /dmo/flight_price;
   currency_code    : /dmo/currency_code;
 //highlight-end
 }
 ```
 
-## ABAP-Klasse `ZCL_TRAVEL_GENERATOR`
+## ABAP-Klasse `ZXX_CL_TRAVEL_GENERATOR`
 
-```abap title="ZCL_TRAVEL_GENERATOR.abap" showLineNumbers
-CLASS zcl_travel_generator DEFINITION PUBLIC FINAL CREATE PUBLIC.
+```abap title="ZXX_CL_TRAVEL_GENERATOR.abap" showLineNumbers
+CLASS ZXX_cl_travel_generator DEFINITION PUBLIC FINAL CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES if_oo_adt_classrun.
 ENDCLASS.
 
-CLASS zcl_travel_generator IMPLEMENTATION.
+CLASS ZXX_cl_travel_generator IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
-    DATA travel   TYPE z_travel_a.
-    DATA travels  TYPE TABLE OF z_travel_a.
+    DATA travel   TYPE ZXX_travel_a.
+    DATA travels  TYPE TABLE OF ZXX_travel_a.
 //highlight-start
-    DATA booking  TYPE z_booking_a.
-    DATA bookings TYPE TABLE OF z_booking_a.
+    DATA booking  TYPE ZXX_booking_a.
+    DATA bookings TYPE TABLE OF ZXX_booking_a.
 //highlight-end
 
     " Delete Travels
-    DELETE FROM z_travel_a.
+    DELETE FROM ZXX_travel_a.
     out->write( |Deleted Travels: { sy-dbcnt }| ).
 
 //highlight-start
     " Delete Bookings
-    DELETE FROM z_booking_a.
+    DELETE FROM ZXX_booking_a.
     out->write( |Deleted Bookings: { sy-dbcnt }| ).
 //highlight-end
 
@@ -194,27 +194,27 @@ CLASS zcl_travel_generator IMPLEMENTATION.
     APPEND travel TO travels.
 
     " Insert Travels
-    INSERT z_travel_a FROM TABLE @travels.
+    INSERT ZXX_travel_a FROM TABLE @travels.
     out->write( |Inserted Travels: { sy-dbcnt }| ).
 
 //highlight-start
     " Insert Bookings
-    INSERT z_booking_a FROM TABLE @bookings.
+    INSERT ZXX_booking_a FROM TABLE @bookings.
     out->write( |Inserted Bookings: { sy-dbcnt }| ).
 //highlight-end
   ENDMETHOD.
 ENDCLASS.
 ```
 
-## BO Base View `ZR_Booking`
+## BO Basic View `ZXX_R_Booking`
 
 ```sql showLineNumbers
 //highlight-start
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Booking'
-define view entity ZR_Booking
-  as select from z_booking_a
-  association to parent ZR_Travel as _Travel on $projection.TravelUuid = _Travel.TravelUuid
+define view entity ZXX_R_Booking
+  as select from ZXX_booking_a
+  association to parent ZXX_R_Travel as _Travel on $projection.TravelUuid = _Travel.TravelUuid
 {
   key booking_uuid  as BookingUuid,
       travel_uuid   as TravelUuid,
@@ -233,15 +233,15 @@ define view entity ZR_Booking
 //highlight-end
 ```
 
-## BO Base View `ZR_Travel`
+## BO Basic View `ZXX_R_Travel`
 
 ```sql showLineNumbers
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel'
-define root view entity ZR_Travel
-  as select from z_travel_a
+define root view entity ZXX_R_Travel
+  as select from ZXX_travel_a
 //highlight-start
-  composition [0..*] of ZR_Booking as _Bookings
+  composition [0..*] of ZXX_R_Booking as _Bookings
 //highlight-end
 {
   key travel_uuid     as TravelUuid,

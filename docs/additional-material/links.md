@@ -18,6 +18,4 @@ tags: []
 
 - [Acquire Core ABAP Skills (_SAP Learning Journey_)](https://learning.sap.com/learning-journey/acquire-core-abap-skills)
 - [ABAP Development RAP Workshops (_Workshop_)](https://github.com/SAP-samples/abap-platform-rap-workshops)
-- [SAP Fiori Elements 4 RAP (_Workshop_)](https://github.wdf.sap.corp/D052858/fiori-elements-v4-rap-basic)
-- [S4D437 - Transactional Apps with the ABAP RESTful Application Programming Model (_Standardschulung_)](https://training.sap.com/course/s4d437-transactional-apps-with-the-abap-restful-application-programming-model-classroom-022-g-en/?)
 - [ABAP RESTful Programming Model – ABAP Development for SAP S/4HANA (_Rheinwerk-Buch_)](https://www.rheinwerk-verlag.de/abap-restful-application-programming-model-das-umfassende-handbuch/)
