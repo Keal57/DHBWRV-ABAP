@@ -27,7 +27,7 @@ tags: []
 - View `Window - Show View - Other... - ABAP - abapGit Repositories` öffnen
 - Drucktaste `Link New abapGit Repository...` betätigen
 - Folgende Informationen eingeben und Drucktaste `Next >` betätigen
-  - URL: `Die Repository-URL` (z.B. https://github.com/appenmmaier/abap)
+  - URL: `Die Repository-URL` (z.B. https://github.com/user/repo)
 - Folgende Informationen eingeben und Drucktaste `Next >` betätigen
   - Package: `Das ABAP-Paket` (z.B. ZABAP)
 - Folgende Informationen eingeben und Drucktaste `Finish` betätigen
@@ -42,8 +42,8 @@ tags: []
 - Objekte markieren und Drucktaste `Stage selected Objects` betätigen
 - Folgende Informationen eingeben und Drucktaste `Commit and Push...` betätigen
   - Commit Message: `Ein beliebiger Kommentar` (z.B. update demos)
-  - Author: `Dein Name` (z.B. Daniel Appenmaier)
-  - Committer: `Deine Email-Adresse` (z.B. daniel.appenmaier@gmail.com)
+  - Author: `Dein Name` (z.B. Hans Maier)
+  - Committer: `Deine Email-Adresse`
 
 ## Änderungen vom Remote-Repository herunterladen
 

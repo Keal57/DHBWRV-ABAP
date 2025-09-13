@@ -69,12 +69,7 @@ const config = {
           docId: "additional-material/adt",
           position: "left",
           label: "Zusatzmaterial",
-        },
-        {
-          href: "https://github.com/appenmaier/s4hana",
-          label: "GitHub",
-          position: "right",
-        },
+        }
       ],
     },
     footer: {
