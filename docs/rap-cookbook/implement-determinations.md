@@ -4,19 +4,19 @@ description: ""
 sidebar_position: 140
 ---
 
-- Die BO Base View `ZR_Travel` um Annotationen zur Ermittlung administrativer Daten erweitern
-- Die Behavior Definition `ZR_TRAVEL` um statische Feldkontrollen und Ermittlungen erweitern
-- Die Verhaltensimplementierung `ZBP_TRAVEL` um Behandlermethoden zu Ermittlungen erweitern
+- Die BO Base View `ZXX_R_Travel` um Annotationen zur Ermittlung administrativer Daten erweitern
+- Die Behavior Definition `ZXX_R_TRAVEL` um statische Feldkontrollen und Ermittlungen erweitern
+- Die Verhaltensimplementierung `ZXX_BP_TRAVEL` um Behandlermethoden zu Ermittlungen erweitern
 
-## BO Base View `ZR_Travel`
+## BO Base View `ZXX_R_Travel`
 
 ```sql showLineNumbers
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel'
-define root view entity ZR_Travel
-  as select from z_travel_a
-  composition [0..*] of ZR_Booking      as _Bookings
-  association [1..1] to ZI_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
+define root view entity ZXX_R_Travel
+  as select from ZXX_travel_a
+  composition [0..*] of ZXX_R_Booking      as _Bookings
+  association [1..1] to ZXX_I_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
 {
   key travel_uuid        as TravelUuid,
       travel_id          as TravelId,
@@ -69,14 +69,14 @@ define root view entity ZR_Travel
 }
 ```
 
-## Behavior Definition `ZR_TRAVEL`
+## Behavior Definition `ZXX_R_TRAVEL`
 
 ```sql showLineNumbers
-managed implementation in class zbp_travel unique;
+managed implementation in class ZXX_bp_travel unique;
 strict ( 2 );
 
-define behavior for ZR_Travel alias Travel
-persistent table z_travel_a
+define behavior for ZXX_R_Travel alias Travel
+persistent table ZXX_travel_a
 lock master
 authorization master ( instance )
 //etag master <field_name>
@@ -105,7 +105,7 @@ authorization master ( instance )
   field ( readonly ) CreatedAt, CreatedBy, LastChangedAt, LastChangedBy, Status, TravelId;
 //highlight-end
 
-  mapping for z_travel_a corresponding
+  mapping for ZXX_travel_a corresponding
   {
     AgencyId = agency_id;
     BeginDate = begin_date;
@@ -125,8 +125,8 @@ authorization master ( instance )
   }
 }
 
-define behavior for ZR_Booking alias Booking
-persistent table z_booking_a
+define behavior for ZXX_R_Booking alias Booking
+persistent table ZXX_booking_a
 lock dependent by _Travel
 authorization dependent by _Travel
 //etag master <field_name>
@@ -139,7 +139,7 @@ authorization dependent by _Travel
   field ( readonly, numbering : managed ) BookingUuid;
   field ( readonly ) TravelUuid;
 
-  mapping for z_booking_a corresponding
+  mapping for ZXX_booking_a corresponding
   {
     BookingDate = booking_Date;
     BookingId = booking_id;
@@ -154,24 +154,24 @@ authorization dependent by _Travel
 }
 ```
 
-## Verhaltensimplementierung `ZBP_TRAVEL`
+## Verhaltensimplementierung `ZXX_BP_TRAVEL`
 
-### Global Class `ZBP_TRAVEL`
+### Global Class `ZXX_BP_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" showLineNumbers
-CLASS zbp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zr_travel.
+```abap title="ZXX_BP_TRAVEL.abap" showLineNumbers
+CLASS ZXX_bp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF ZXX_r_travel.
   PROTECTED SECTION.
 
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zbp_travel IMPLEMENTATION.
+CLASS ZXX_bp_travel IMPLEMENTATION.
 ENDCLASS.
 ```
 
 ### Local Type `LHC_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" shwoLineNumbers
+```abap title="ZXX_BP_TRAVEL.abap" shwoLineNumbers
 CLASS lhc_travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
@@ -203,20 +203,20 @@ CLASS lhc_travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD showtestmessage.
-    DATA message TYPE REF TO zcm_travel.
+    DATA message TYPE REF TO ZXX_cm_travel.
 
-    message = NEW zcm_travel( severity  = if_abap_behv_message=>severity-success
-                              textid    = zcm_travel=>test_message
+    message = NEW ZXX_cm_travel( severity  = if_abap_behv_message=>severity-success
+                              textid    = ZXX_cm_travel=>test_message
                               user_name = sy-uname ).
 
     APPEND message TO reported-%other.
   ENDMETHOD.
 
   METHOD validateagency.
-    DATA message TYPE REF TO zcm_travel.
+    DATA message TYPE REF TO ZXX_cm_travel.
 
     " Read Travels
-    READ ENTITY IN LOCAL MODE ZR_Travel
+    READ ENTITY IN LOCAL MODE ZXX_R_Travel
          FIELDS ( AgencyId )
          WITH CORRESPONDING #( keys )
          RESULT DATA(travels).
@@ -226,7 +226,7 @@ CLASS lhc_travel IMPLEMENTATION.
       " Validate Agency and Create Error Message
       SELECT SINGLE FROM /dmo/agency FIELDS @abap_true WHERE agency_id = @travel-AgencyId INTO @DATA(exists).
       IF exists = abap_false.
-        message = NEW zcm_travel( textid    = zcm_travel=>no_agency_found
+        message = NEW ZXX_cm_travel( textid    = ZXX_cm_travel=>no_agency_found
                                   agency_id = travel-AgencyId ).
         APPEND VALUE #( %tky     = travel-%tky
                         %element = VALUE #( AgencyId = if_abap_behv=>mk-on )
@@ -237,10 +237,10 @@ CLASS lhc_travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD validatecustomer.
-    DATA message TYPE REF TO zcm_travel.
+    DATA message TYPE REF TO ZXX_cm_travel.
 
     " Read Travels
-    READ ENTITY IN LOCAL MODE ZR_Travel
+    READ ENTITY IN LOCAL MODE ZXX_R_Travel
          FIELDS ( CustomerId )
          WITH CORRESPONDING #( keys )
          RESULT DATA(travels).
@@ -250,7 +250,7 @@ CLASS lhc_travel IMPLEMENTATION.
       " Validate Agency and Create Error Message
       SELECT SINGLE FROM /dmo/customer FIELDS @abap_true WHERE customer_id = @travel-CustomerId INTO @DATA(exists).
       IF exists = abap_false.
-        message = NEW zcm_travel( textid      = zcm_travel=>no_customer_found
+        message = NEW ZXX_cm_travel( textid      = ZXX_cm_travel=>no_customer_found
                                   customer_id = travel-CustomerId ).
         APPEND VALUE #( %tky     = travel-%tky
                         %element = VALUE #( CustomerId = if_abap_behv=>mk-on )
@@ -261,10 +261,10 @@ CLASS lhc_travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD validatedates.
-    DATA message TYPE REF TO zcm_travel.
+    DATA message TYPE REF TO ZXX_cm_travel.
 
     " Read Travels
-    READ ENTITY IN LOCAL MODE ZR_Travel
+    READ ENTITY IN LOCAL MODE ZXX_R_Travel
          FIELDS ( BeginDate EndDate )
          WITH CORRESPONDING #( keys )
          RESULT DATA(travels).
@@ -273,7 +273,7 @@ CLASS lhc_travel IMPLEMENTATION.
     LOOP AT travels INTO DATA(travel).
       " Validate Dates and Create Error Message
       IF travel-EndDate < travel-BeginDate.
-        message = NEW zcm_travel( textid = zcm_travel=>invalid_dates ).
+        message = NEW ZXX_cm_travel( textid = ZXX_cm_travel=>invalid_dates ).
         APPEND VALUE #( %tky = travel-%tky
                         %msg = message ) TO reported-travel.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
@@ -283,7 +283,7 @@ CLASS lhc_travel IMPLEMENTATION.
 
 //highlight-start
   METHOD determinestatus.
-    MODIFY ENTITY IN LOCAL MODE ZR_Travel
+    MODIFY ENTITY IN LOCAL MODE ZXX_R_Travel
            UPDATE FIELDS ( Status )
            WITH VALUE #( FOR key IN keys
                          ( %tky   = key-%tky
@@ -300,7 +300,7 @@ CLASS lhc_travel IMPLEMENTATION.
     travel_id = max_travel_id + 1.
 
     " Modify Travels
-    MODIFY ENTITY IN LOCAL MODE ZR_Travel
+    MODIFY ENTITY IN LOCAL MODE ZXX_R_Travel
            UPDATE FIELDS ( TravelId )
            WITH VALUE #( FOR key IN keys
                          ( %tky     = key-%tky

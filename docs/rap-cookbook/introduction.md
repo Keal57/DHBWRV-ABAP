@@ -12,24 +12,21 @@ Diese Kochbuch stellt eine Schritt-für-Schritt-Anleitung zur Entwicklung einer 
 | Business Services   | Service Definitions   | ZXX_UI_TRAVEL           | Service Definition Reise          |
 | Core Data Services  | Behavior Definitions  | ZXX_C_TRAVEL            | Behavior Projection Reise         |
 | Core Data Services  | Behavior Definitions  | ZXX_R_TRAVEL            | Behavior Definition Reise         |
-| Core Data Services  | Data Definitions      | ZXX_A_BookingFee        | Abstract View Buchungsgebühr      |
 | Core Data Services  | Data Definitions      | ZXX_C_Booking           | BP Projection View Buchung        |
 | Core Data Services  | Data Definitions      | ZXX_C_Travel            | BO Projection View Reise          |
 | Core Data Services  | Data Definitions      | ZXX_I_CustomerText      | Interface View Kundenname         |
 | Core Data Services  | Data Definitions      | ZXX_I_CustomerVH        | Interface View Kunde              |
 | Core Data Services  | Data Definitions      | ZXX_I_StatusVH          | Interface View Status             |
-| Core Data Services  | Data Definitions      | ZXX_R_Booking           | BO Base View Buchung              |
-| Core Data Services  | Data Definitions      | ZXX_R_Travel            | BO Base View Reise                |
+| Core Data Services  | Data Definitions      | ZXX_R_Booking           | BO Basic View Buchung              |
+| Core Data Services  | Data Definitions      | ZXX_R_Travel            | BO Basic View Reise                |
 | Core Data Services  | Metadata Extensions   | ZXX_C_BOOKING           | Metadata Extension Buchung        |
 | Core Data Services  | Metadata Extensions   | ZXX_C_TRAVEL            | Metadata Extension Reise          |
-| Dictionary          | Database Tables       | ZXX__BOOKING_A          | Anwendungstabelle Buchung         |
-| Dictionary          | Database Tables       | ZXX__TRAVEL_A           | Anwendungstabelle Reise           |
-| Dictionary          | Database Tables       | ZXX__BOOKING_D          | Entwurfstabelle Buchung           |
-| Dictionary          | Database Tables       | ZXX__TRAVEL_D           | Entwurfstabelle Reise             |
+| Dictionary          | Database Tables       | ZXX_BOOKING_A          | Anwendungstabelle Buchung         |
+| Dictionary          | Database Tables       | ZXX_TRAVEL_A           | Anwendungstabelle Reise           |
 | Source Code Library | Classes               | ZXX_CL_TRAVEL_GENERATOR | ABAP-Klasse Reise-Generator       |
 | Source Code Library | Classes               | ZXX_CM_TRAVEL           | Nachrichtenklasse Reise           |
 | Source Code Library | Classes               | ZXX_BP_TRAVEL           | Verhaltensimplementierung Reise   |
-| Texts               | Message Classes       | ZXX__TRAVEL             | Message Class Reise               |
+| Texts               | Message Classes       | ZXX_TRAVEL             | Message Class Reise               |
 
 ## Überblick über die Architektur
 

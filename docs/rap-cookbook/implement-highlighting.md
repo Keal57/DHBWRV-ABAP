@@ -4,19 +4,19 @@ description: ""
 sidebar_position: 100
 ---
 
-- Die BO Base View `ZR_Travel` um transiente Felder zur Darstellung der Wichtigkeit erweitern
-- Die BO Projection View `ZC_Travel` um transiente Felder zur Darstellung der Wichtigkeit erweitern
-- Die Metadata Extension `ZC_TRAVEL` um Eigenschaften zur Darstellung der Wichtigkeit erweitern
+- Die BO Base View `ZXX_R_Travel` um transiente Felder zur Darstellung der Wichtigkeit erweitern
+- Die BO Projection View `ZXX_C_Travel` um transiente Felder zur Darstellung der Wichtigkeit erweitern
+- Die Metadata Extension `ZXX_C_TRAVEL` um Eigenschaften zur Darstellung der Wichtigkeit erweitern
 
-## BO Base View `ZR_Travel`
+## BO Base View `ZXX_R_Travel`
 
 ```sql showLineNumbers
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel'
-define root view entity ZR_Travel
-  as select from z_travel_a
-  composition [0..*] of ZR_Booking      as _Bookings
-  association [1..1] to ZI_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
+define root view entity ZXX_R_Travel
+  as select from ZXX_travel_a
+  composition [0..*] of ZXX_R_Booking      as _Bookings
+  association [1..1] to ZXX_I_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
 {
   key travel_uuid        as TravelUuid,
       travel_id          as TravelId,
@@ -59,22 +59,22 @@ define root view entity ZR_Travel
 }
 ```
 
-## BO Projection View `ZC_Travel`
+## BO Projection View `ZXX_C_Travel`
 
 ```sql showLineNumbers
 @EndUserText.label: 'Travel'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Search.searchable: true
 @Metadata.allowExtensions: true
-define root view entity ZC_Travel
+define root view entity ZXX_C_Travel
   provider contract transactional_query
-  as projection on ZR_Travel
+  as projection on ZXX_R_Travel
 {
   key TravelUuid,
       TravelId,
-      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_AgencyStdVH', element: 'AgencyID' }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Agency_StdVH', element: 'AgencyID' } }]
       AgencyId,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_CustomerVH', element: 'CustomerId' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_CustomerVH', element: 'CustomerId' } }]
       CustomerId,
       BeginDate,
       EndDate,
@@ -85,7 +85,7 @@ define root view entity ZC_Travel
       @Search.defaultSearchElement: true
       @Search.fuzzinessThreshold: 0.7
       Description,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_StatusVH', element: 'Status' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_StatusVH', element: 'Status' } }]
       Status,
 
       /* Administrative Data */
@@ -102,11 +102,11 @@ define root view entity ZC_Travel
 //highlight-end
 
       /* Associations */
-      _Bookings : redirected to composition child ZC_Booking
+      _Bookings : redirected to composition child ZXX_C_Booking
 }
 ```
 
-## Metadata Extension `ZC_TRAVEL`
+## Metadata Extension `ZXX_C_TRAVEL`
 
 ```sql showLineNumbers
 @Metadata.layer: #CUSTOMER
@@ -117,7 +117,7 @@ define root view entity ZC_Travel
   title.value: 'TravelId',
   description.value: 'Description'
 }
-annotate view ZC_Travel with
+annotate view ZXX_C_Travel with
 {
 
   /* Facets */

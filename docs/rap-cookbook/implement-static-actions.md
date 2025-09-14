@@ -4,24 +4,24 @@ description: ""
 sidebar_position: 120
 ---
 
-- Die Message Class `Z_TRAVEL` erstellen
-- Die Nachrichtenklasse `ZCM_TRAVEL` erstellen
-- Die Behavior Definition `ZR_TRAVEL` um eine Aktion zum Anzeigen einer Nachricht erweitern
-- Die Verhaltensimplementierung `ZBP_TRAVEL` um eine Behandlermethode zum Anzeigen einer Nachricht erweitern
-- Die Behavior Projection `ZC_TRAVEL` um eine Aktion zum Anzeigen einer Nachricht erweitern
-- Die Metadata Extension `ZC_TRAVEL` um Annotationen für eine Aktion zum Anzeigen einer Nachricht erweitern
+- Die Message Class `ZXX_TRAVEL` erstellen
+- Die Nachrichtenklasse `ZXX_CM_TRAVEL` erstellen
+- Die Behavior Definition `ZXX_R_TRAVEL` um eine Aktion zum Anzeigen einer Nachricht erweitern
+- Die Verhaltensimplementierung `ZXX_BP_TRAVEL` um eine Behandlermethode zum Anzeigen einer Nachricht erweitern
+- Die Behavior Projection `ZXX_C_TRAVEL` um eine Aktion zum Anzeigen einer Nachricht erweitern
+- Die Metadata Extension `ZXX_C_TRAVEL` um Annotationen für eine Aktion zum Anzeigen einer Nachricht erweitern
 
-## Message Class `Z_TRAVEL`
+## Message Class `ZXX_TRAVEL`
 
 | Nachrichtennummer | Nachricht                      |
 | ----------------- | ------------------------------ |
 | 001               | This is a Test Message from &1 |
 
-## Nachrichtenklasse `ZCM_TRAVEL`
+## Nachrichtenklasse `ZXX_CM_TRAVEL`
 
-```abap title="ZCM_TRAVEL.abap" showLineNumbers
+```abap title="ZXX_CM_TRAVEL.abap" showLineNumbers
 //highlight-start
-CLASS zcm_travel DEFINITION PUBLIC
+CLASS ZXX_cm_travel DEFINITION PUBLIC
   INHERITING FROM cx_static_check FINAL CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -33,7 +33,7 @@ CLASS zcm_travel DEFINITION PUBLIC
     " Message Constants
     CONSTANTS:
       BEGIN OF test_message,
-        msgid TYPE symsgid      VALUE 'Z_TRAVEL',
+        msgid TYPE symsgid      VALUE 'ZXX_TRAVEL',
         msgno TYPE symsgno      VALUE '001',
         attr1 TYPE scx_attrname VALUE 'USER_NAME',
         attr2 TYPE scx_attrname VALUE '',
@@ -58,7 +58,7 @@ CLASS zcm_travel DEFINITION PUBLIC
 
 ENDCLASS.
 
-CLASS zcm_travel IMPLEMENTATION.
+CLASS ZXX_cm_travel IMPLEMENTATION.
   METHOD constructor ##ADT_SUPPRESS_GENERATION.
     super->constructor( previous = previous ).
 
@@ -70,14 +70,14 @@ ENDCLASS.
 //highlight-end
 ```
 
-## Behavior Definition `ZR_TRAVEL`
+## Behavior Definition `ZXX_R_TRAVEL`
 
 ```sql showLineNumbers
-managed implementation in class zbp_travel unique;
+managed implementation in class ZXX_bp_travel unique;
 strict ( 2 );
 
-define behavior for ZR_Travel alias Travel
-persistent table z_travel_a
+define behavior for ZXX_R_Travel alias Travel
+persistent table ZXX_travel_a
 lock master
 authorization master ( instance )
 //etag master <field_name>
@@ -94,7 +94,7 @@ authorization master ( instance )
 
   field ( readonly, numbering : managed ) TravelUuid;
 
-  mapping for z_travel_a corresponding
+  mapping for ZXX_travel_a corresponding
   {
     AgencyId = agency_id;
     BeginDate = begin_date;
@@ -114,8 +114,8 @@ authorization master ( instance )
   }
 }
 
-define behavior for ZR_Booking alias Booking
-persistent table z_booking_a
+define behavior for ZXX_R_Booking alias Booking
+persistent table ZXX_booking_a
 lock dependent by _Travel
 authorization dependent by _Travel
 //etag master <field_name>
@@ -128,7 +128,7 @@ authorization dependent by _Travel
   field ( readonly, numbering : managed ) BookingUuid;
   field ( readonly ) TravelUuid;
 
-  mapping for z_booking_a corresponding
+  mapping for ZXX_booking_a corresponding
   {
     BookingDate = booking_Date;
     BookingId = booking_id;
@@ -143,24 +143,24 @@ authorization dependent by _Travel
 }
 ```
 
-## Verhaltensimplementierung `ZBP_TRAVEL`
+## Verhaltensimplementierung `ZXX_BP_TRAVEL`
 
-### Global Class `ZBP_TRAVEL`
+### Global Class `ZXX_BP_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" showLineNumbers
-CLASS zbp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zr_travel.
+```abap title="ZXX_BP_TRAVEL.abap" showLineNumbers
+CLASS ZXX_bp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF ZXX_r_travel.
   PROTECTED SECTION.
 
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zbp_travel IMPLEMENTATION.
+CLASS ZXX_bp_travel IMPLEMENTATION.
 ENDCLASS.
 ```
 
 ### Local Type `LHC_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" shwoLineNumbers
+```abap title="ZXX_BP_TRAVEL.abap" shwoLineNumbers
 CLASS lhc_travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
@@ -178,10 +178,10 @@ CLASS lhc_travel IMPLEMENTATION.
 
 //highlight-start
   METHOD showtestmessage.
-    DATA message TYPE REF TO zcm_travel.
+    DATA message TYPE REF TO ZXX_cm_travel.
 
-    message = NEW zcm_travel( severity  = if_abap_behv_message=>severity-success
-                              textid    = zcm_travel=>test_message
+    message = NEW ZXX_cm_travel( severity  = if_abap_behv_message=>severity-success
+                              textid    = ZXX_cm_travel=>test_message
                               user_name = sy-uname ).
 
     APPEND message TO reported-%other.
@@ -190,13 +190,13 @@ CLASS lhc_travel IMPLEMENTATION.
 ENDCLASS.
 ```
 
-## Behavior Projection `ZC_TRAVEL`
+## Behavior Projection `ZXX_C_TRAVEL`
 
 ```sql showLineNumbers
 projection;
 strict ( 2 );
 
-define behavior for ZC_Travel alias Travel
+define behavior for ZXX_C_Travel alias Travel
 {
   use create;
   use update;
@@ -209,7 +209,7 @@ define behavior for ZC_Travel alias Travel
 //highlight-end
 }
 
-define behavior for ZC_Booking alias Booking
+define behavior for ZXX_C_Booking alias Booking
 {
   use update;
   use delete;
@@ -218,7 +218,7 @@ define behavior for ZC_Booking alias Booking
 }
 ```
 
-## Metadata Extension `ZC_TRAVEL`
+## Metadata Extension `ZXX_C_TRAVEL`
 
 ```sql showLineNumbers
 @Metadata.layer: #CUSTOMER
@@ -230,7 +230,7 @@ define behavior for ZC_Booking alias Booking
   description.value: 'Description'
 }
 @UI.presentationVariant: [{sortOrder: [{ by: 'BeginDate', direction: #DESC }]}]
-annotate view ZC_Travel with
+annotate view ZXX_C_Travel with
 {
 
   /* Facets */

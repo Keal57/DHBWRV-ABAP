@@ -4,18 +4,18 @@ description: ""
 sidebar_position: 80
 ---
 
-- Die Interface View `ZI_CustomerVH` erstellen
-- Die Interface View `ZI_StatusVH` erstellen
-- Die BO Projection View `ZC_Travel` um Annotationen für Wertehilfen erweitern
-- Die BO Projection View `ZC_Booking` um Annotationen für Wertehilfen erweitern
+- Die Interface View `ZXX_I_CustomerVH` erstellen
+- Die Interface View `ZXX_I_StatusVH` erstellen
+- Die BO Projection View `ZXX_C_Travel` um Annotationen für Wertehilfen erweitern
+- Die BO Projection View `ZXX_C_Booking` um Annotationen für Wertehilfen erweitern
 
-## Interface View `ZI_CustomerVH`
+## Interface View `ZXX_I_CustomerVH`
 
 ```sql showLineNumbers
 //highlight-start
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Value Help for Customer'
-define view entity ZI_CustomerVH
+define view entity ZXX_I_CustomerVH
   as select from /dmo/customer
 {
   key customer_id  as CustomerId,
@@ -30,13 +30,13 @@ define view entity ZI_CustomerVH
 //highlight-end
 ```
 
-## Interface View `ZI_StatusVH`
+## Interface View `ZXX_I_StatusVH`
 
 ```sql showLineNumbers
 //highlight-start
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Value Help for Status'
-define view entity ZI_StatusVH
+define view entity ZXX_I_StatusVH
   as select from DDCDS_CUSTOMER_DOMAIN_VALUE_T( p_domain_name: '/DMO/STATUS' )
 {
       @UI.hidden: true
@@ -55,16 +55,16 @@ where
 //highlight-end
 ```
 
-## BO Projection View `ZC_Travel`
+## BO Projection View `ZXX_C_Travel`
 
 ```sql showLineNumbers
 @EndUserText.label: 'Travel'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Search.searchable: true
 @Metadata.allowExtensions: true
-define root view entity ZC_Travel
+define root view entity ZXX_C_Travel
   provider contract transactional_query
-  as projection on ZR_Travel
+  as projection on ZXX_R_Travel
 {
   key TravelUuid,
       TravelId,
@@ -73,7 +73,7 @@ define root view entity ZC_Travel
 //highlight-end
       AgencyId,
 //highlight-start
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_CustomerVH', element: 'CustomerId' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_CustomerVH', element: 'CustomerId' } }]
 //highlight-end
       CustomerId,
       BeginDate,
@@ -88,7 +88,7 @@ define root view entity ZC_Travel
       @Search.fuzzinessThreshold: 0.7
       Description,
 //highlight-start
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_StatusVH', element: 'Status' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_StatusVH', element: 'Status' } }]
 //highlight-end
       Status,
 
@@ -96,21 +96,21 @@ define root view entity ZC_Travel
       CreatedBy,
       CreatedAt,
       LastChangedBy,
-      LastChangedAt
+      LastChangedAt,
 
       /* Associations */
-      _Bookings : redirected to composition child ZC_Booking
+      _Bookings : redirected to composition child ZXX_C_Booking
 }
 ```
 
-## BO Projection View `ZC_Booking`
+## BO Projection View `ZXX_C_Booking`
 
 ```sql showLineNumbers
 @EndUserText.label: 'Booking'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
-define view entity ZC_Booking
-  as projection on ZR_Booking
+define view entity ZXX_C_Booking
+  as projection on ZXX_R_Booking
 {
   key BookingUuid,
       TravelUuid,
@@ -129,6 +129,6 @@ define view entity ZC_Booking
       CurrencyCode,
 
       /* Associations */
-      _Travel : redirected to parent ZC_Travel
+      _Travel : redirected to parent ZXX_C_Travel
 }
 ```

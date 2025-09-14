@@ -4,20 +4,20 @@ description: ""
 sidebar_position: 70
 ---
 
-- Die Behavior Definition `ZR_TRAVEL` erstellen
-- Eine Verhaltensimplementierung für die Behavior Definition `ZR_TRAVEL` generieren lassen
-- Die BO Projection View `ZC_Travel` um Angaben zum Provider Contract erweitern
-- Die Behavior Projection `ZC_TRAVEL` erstellen
+- Die Behavior Definition `ZXX_R_TRAVEL` erstellen
+- Eine Verhaltensimplementierung für die Behavior Definition `ZXX_R_TRAVEL` generieren lassen
+- Die BO Projection View `ZXX_C_Travel` um Angaben zum Provider Contract erweitern
+- Die Behavior Projection `ZXX_C_TRAVEL` erstellen
 
-## Behavior Definition `ZR_TRAVEL`
+## Behavior Definition `ZXX_R_TRAVEL`
 
 ```sql showLineNumbers
 //highlight-start
-managed implementation in class zbp_travel unique;
+managed implementation in class ZXX_bp_travel unique;
 strict ( 2 );
 
-define behavior for ZR_Travel alias Travel
-persistent table z_travel_a
+define behavior for ZXX_R_Travel alias Travel
+persistent table ZXX_travel_a
 lock master
 authorization master ( instance )
 //etag master <field_name>
@@ -30,7 +30,7 @@ authorization master ( instance )
 
   field ( readonly, numbering : managed ) TravelUuid;
 
-  mapping for z_travel_a corresponding
+  mapping for ZXX_travel_a corresponding
   {
     AgencyId = agency_id;
     BeginDate = begin_date;
@@ -50,8 +50,8 @@ authorization master ( instance )
   }
 }
 
-define behavior for ZR_Booking alias Booking
-persistent table z_booking_a
+define behavior for ZXX_R_Booking alias Booking
+persistent table ZXX_booking_a
 lock dependent by _Travel
 authorization dependent by _Travel
 //etag master <field_name>
@@ -64,7 +64,7 @@ authorization dependent by _Travel
   field ( readonly, numbering : managed ) BookingUuid;
   field ( readonly ) TravelUuid;
 
-  mapping for z_booking_a corresponding
+  mapping for ZXX_booking_a corresponding
   {
     BookingDate = booking_Date;
     BookingId = booking_id;
@@ -80,26 +80,26 @@ authorization dependent by _Travel
 //highlight-end
 ```
 
-## Verhaltensimplementierung `ZBP_TRAVEL`
+## Verhaltensimplementierung `ZXX_BP_TRAVEL`
 
-### Global Class `ZBP_TRAVEL`
+### Global Class `ZXX_BP_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" showLineNumbers
+```abap title="ZXX_BP_TRAVEL.abap" showLineNumbers
 //highlight-start
-CLASS zbp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zr_travel.
+CLASS ZXX_bp_travel DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF ZXX_r_travel.
   PROTECTED SECTION.
 
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zbp_travel IMPLEMENTATION.
+CLASS ZXX_bp_travel IMPLEMENTATION.
 ENDCLASS.
 //highlight-end
 ```
 
 ### Local Type `LHC_TRAVEL`
 
-```abap title="ZBP_TRAVEL.abap" shwoLineNumbers
+```abap title="ZXX_BP_TRAVEL.abap" shwoLineNumbers
 //highlight-start
 CLASS lhc_travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
@@ -114,18 +114,18 @@ ENDCLASS.
 //highlight-end
 ```
 
-## BO Projection View `ZC_Travel`
+## BO Projection View `ZXX_C_Travel`
 
 ```sql showLineNumbers
 @EndUserText.label: 'Travel'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Search.searchable: true
 @Metadata.allowExtensions: true
-define root view entity ZC_Travel
+define root view entity ZXX_C_Travel
 //highlight-start
   provider contract transactional_query
 //highlight-end
-  as projection on ZR_Travel
+  as projection on ZXX_R_Travel
 {
   key TravelUuid,
       TravelId,
@@ -148,18 +148,18 @@ define root view entity ZC_Travel
       LastChangedAt
 
       /* Associations */
-      _Bookings : redirected to composition child ZC_Booking
+      _Bookings : redirected to composition child ZXX_C_Booking
 }
 ```
 
-## Behavior Projection `ZC_TRAVEL`
+## Behavior Projection `ZXX_C_TRAVEL`
 
 ```sql showLineNumbers
 //highlight-start
 projection;
 strict ( 2 );
 
-define behavior for ZC_Travel alias Travel
+define behavior for ZXX_C_Travel alias Travel
 {
   use create;
   use update;
@@ -168,7 +168,7 @@ define behavior for ZC_Travel alias Travel
   use association _Bookings { create; }
 }
 
-define behavior for ZC_Booking alias Booking
+define behavior for ZXX_C_Booking alias Booking
 {
   use update;
   use delete;

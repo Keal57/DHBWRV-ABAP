@@ -4,17 +4,17 @@ description: ""
 sidebar_position: 90
 ---
 
-- Die Interface View `ZI_CustomerText` erstellen
-- Die BO Base View `ZR_Travel` um ein transientes Feld für Kundentexte und eine Annotation für Textelemente erweitern
-- Die BO Projection View `ZC_Travel` um ein transientes Feld für Kundentexte erweitern
+- Die Interface View `ZXX_I_CustomerText` erstellen
+- Die BO Base View `ZXX_R_Travel` um ein transientes Feld für Kundentexte und eine Annotation für Textelemente erweitern
+- Die BO Projection View `ZXX_C_Travel` um ein transientes Feld für Kundentexte erweitern
 
-## Interface View `ZI_CustomerText`
+## Interface View `ZXX_I_CustomerText`
 
 ```sql showLineNumbers
 //highlight-start
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Textelement for Customer'
-define view entity ZI_CustomerText
+define view entity ZXX_I_CustomerText
 as select from /dmo/customer
 {
   key customer_id                                 as CustomerId,
@@ -28,16 +28,16 @@ as select from /dmo/customer
 //highlight-end
 ```
 
-## BO Base View `ZR_Travel`
+## BO Base View `ZXX_R_Travel`
 
 ```sql showLineNumbers
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel'
-define root view entity ZR_Travel
-  as select from z_travel_a
-  composition [0..*] of ZR_Booking      as _Bookings
+define root view entity ZXX_R_Travel
+  as select from ZXX_travel_a
+  composition [0..*] of ZXX_R_Booking      as _Bookings
 //highlight-start
-  association [1..1] to ZI_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
+  association [1..1] to ZXX_I_CustomerText as _CustomerText on $projection.CustomerId = _CustomerText.CustomerId
 //highlight-end
 {
   key travel_uuid        as TravelUuid,
@@ -61,7 +61,7 @@ define root view entity ZR_Travel
       created_by         as CreatedBy,
       created_at         as CreatedAt,
       last_changed_by    as LastChangedBy,
-      last_changed_at    as LastChangedAt
+      last_changed_at    as LastChangedAt,
 
 //highlight-start
       /* Transient Data */
@@ -73,22 +73,22 @@ define root view entity ZR_Travel
 }
 ```
 
-## BO Projection View `ZC_Travel`
+## BO Projection View `ZXX_C_Travel`
 
 ```sql showLineNumbers
 @EndUserText.label: 'Travel'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Search.searchable: true
 @Metadata.allowExtensions: true
-define root view entity ZC_Travel
+define root view entity ZXX_C_Travel
   provider contract transactional_query
-  as projection on ZR_Travel
+  as projection on ZXX_R_Travel
 {
   key TravelUuid,
       TravelId,
       @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Agency_StdVH', element: 'AgencyID' } }]
       AgencyId,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_CustomerVH', element: 'CustomerId' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_CustomerVH', element: 'CustomerId' } }]
       CustomerId,
       BeginDate,
       EndDate,
@@ -99,14 +99,14 @@ define root view entity ZC_Travel
       @Search.defaultSearchElement: true
       @Search.fuzzinessThreshold: 0.7
       Description,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_StatusVH', element: 'Status' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZXX_I_StatusVH', element: 'Status' } }]
       Status,
 
       /* Administrative Data */
       CreatedBy,
       CreatedAt,
       LastChangedBy,
-      LastChangedAt
+      LastChangedAt,
 
 //highlight-start
       /* Transient Data */
@@ -114,6 +114,6 @@ define root view entity ZC_Travel
 //highlight-end
 
       /* Associations */
-      _Bookings : redirected to composition child ZC_Booking
+      _Bookings : redirected to composition child ZXX_C_Booking
 }
 ```
